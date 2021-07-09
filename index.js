@@ -48,6 +48,7 @@ $("#join-form").submit(async function (e) {
     } catch (error) {
         console.error(error);
     } finally {
+        $("#raise-hand").attr("disabled", false);
         $("#leave").attr("disabled", false);
     }
 })
@@ -99,6 +100,7 @@ async function leave() {
     $("#host-join").attr("disabled", false);
     $("#audience-join").attr("disabled", false);
     $("#leave").attr("disabled", true);
+    $("#raise-hand").attr("disabled", true);
     console.log("Client successfully left channel.");
 }
 

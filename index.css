@@ -56,7 +56,8 @@ input {
 
 #host-join,
 #audience-join,
-#leave {
+#leave,
+#raise-hand {
     background-color: #0C9DFD;
     color: white;
     border-radius: 5px;
@@ -64,7 +65,8 @@ input {
 
 #host-join:hover,
 #leave:hover,
-#audience-join:hover {
+#audience-join:hover,
+#raise-hand:hover {
     background-color: rgba(2, 133, 221, 0.911);
 }
 

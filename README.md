@@ -1,43 +1,44 @@
-# Agora Change Remote User Role
+# Invite user to stage | Agora
 
-[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/akshatvg/Agora-Change-Remote-User-Role?logo=github&style=social)](https://github.com/akshatvg/) [![GitHub last commit](https://img.shields.io/github/last-commit/akshatvg/Agora-Change-Remote-User-Role?style=social&logo=git)](https://github.com/akshatvg/) [![GitHub stars](https://img.shields.io/github/stars/akshatvg/Agora-Change-Remote-User-Role?style=social)](https://github.com/akshatvg/Agora-Change-Remote-User-Role/stargazers) [![GitHub forks](https://img.shields.io/github/forks/akshatvg/Agora-Change-Remote-User-Role?style=social&logo=git)](https://github.com/akshatvg/Agora-Change-Remote-User-Role/network)
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/akshatvg/Agora-Invite-User-To-Stage?logo=github&style=social)](https://github.com/akshatvg/) [![GitHub last commit](https://img.shields.io/github/last-commit/akshatvg/Agora-Invite-User-To-Stage?style=social&logo=git)](https://github.com/akshatvg/) [![GitHub stars](https://img.shields.io/github/stars/akshatvg/Agora-Invite-User-To-Stage?style=social)](https://github.com/akshatvg/Agora-Invite-User-To-Stage/stargazers) [![GitHub forks](https://img.shields.io/github/forks/akshatvg/Agora-Invite-User-To-Stage?style=social&logo=git)](https://github.com/akshatvg/Agora-Invite-User-To-Stage/network)
 
-Sample app to change role of a remote user in a live stream using the RTM SDK.
+Invite a user to stage and become a host using a raise hand feature during a livestream using the Agora RTC and RTM SDKs.
 
 <p align="center">
-<a href="https://changerole.akshatvg.com">
+<a href="https://handraise.akshatvg.com/">
 <img src="./favicon.png" width="60px" alt="Agora.io"/>
 </a>
 </p>
 
-![Generic badge](https://img.shields.io/badge/Change-Role-orange) 
+![Generic badge](https://img.shields.io/badge/Invite_to-the_Stage-orange) 
 
-[![Generic badge](https://img.shields.io/badge/view-demo-purple)](https://changerole.akshatvg.com)
+[![Generic badge](https://img.shields.io/badge/view-demo-purple)](https://handraise.akshatvg.com/)
 
 ## Features
 
 - Livestreaming
 - Changing role of user to audience or host
+- Raising hand using a button click and notifying the host
 
 ## Useful Links
 
-- [Deployed Website](https://changerole.akshatvg.com)
+- [Deployed Website](https://handraise.akshatvg.com/)
 - [Agora.io Website](https://www.agora.io/)
 - [SDK NG Documentation](https://agoraio-community.github.io/AgoraWebSDK-NG/api/en/index.html)
 - [Sample Video Call App](https://github.com/AgoraIO-Community/AgoraWebSDK-NG/tree/master/Demo/basicVideoCall)
 - [Agora RTM SDK Documentation](https://docs.agora.io/en/Real-time-Messaging/API%20Reference/RTM_web/v1.0.0/index.html)
 - [RTM Quickstart Guide](https://docs.agora.io/en/Real-time-Messaging/messaging_web?platform=Web)
-- [Guided Blog](https://medium.com/@akshatvg/change-role-of-remote-host-in-a-live-streaming-web-app-8c5b3e0a651f)
+- [Guided Blog](#!)
 
 ## Requirements
 
-[![GitHub top language](https://img.shields.io/github/languages/top/akshatvg/Agora-Change-Remote-User-Role?logo=javascript&style=social)](https://github.com/akshatvg/)
+[![GitHub top language](https://img.shields.io/github/languages/top/akshatvg/Agora-Invite-User-To-Stage?logo=javascript&style=social)](https://github.com/akshatvg/)
 
 The source code of this project is written in **`HTML`, `CSS`, `JavaScript`, `Agora RTM SDK` and the `Agora SDK NG`**. So, you would require the Agora SDKs and a valid App Id to run this project.
 
 ## Instructions
 
-[![chrome](https://img.shields.io/badge/Open-index.html-lightgrey.svg?logo=google-chrome&style=popout&logoColor=red)](https://changerole.akshatvg.com)
+[![chrome](https://img.shields.io/badge/Open-index.html-lightgrey.svg?logo=google-chrome&style=popout&logoColor=red)](https://handraise.akshatvg.com/)
 
 Extract the folder and run `index.html`
 
@@ -88,9 +89,9 @@ ______      _               _   _               _
 
 ## License
 
-**MIT &copy; [Akshat Gupta](https://github.com/akshatvg/Agora-Change-Remote-User-Role/blob/master/LICENSE)**
+**MIT &copy; [Akshat Gupta](https://github.com/akshatvg/Agora-Invite-User-To-Stage/blob/master/LICENSE)**
 
-[![GitHub license](https://img.shields.io/github/license/akshatvg/Agora-Change-Remote-User-Role?style=social&logo=github)](https://github.com/akshatvg/Agora-Change-Remote-User-Role/blob/master/LICENSE) [![Twitter Follow](https://img.shields.io/twitter/follow/akshatvg?style=social)](https://twitter.com/akshatvg)
+[![GitHub license](https://img.shields.io/github/license/akshatvg/Agora-Invite-User-To-Stage?style=social&logo=github)](https://github.com/akshatvg/Agora-Invite-User-To-Stage/blob/master/LICENSE) [![Twitter Follow](https://img.shields.io/twitter/follow/akshatvg?style=social)](https://twitter.com/akshatvg)
 
 ---------
 

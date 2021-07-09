@@ -7,13 +7,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Sample app to change role of a remote user in a live stream using the RTM SDK.">
+    <meta name="description"
+        content="Invite a user to stage and become a host using a raise hand feature during a livestream using the Agora RTC and RTM SDKs.">
     <meta name="keywords"
         content="Agora, RTC, Live Stream, Live Streaming, SDK, CDN, Agora.io, NG, Many to Many, Change Role, Remote User, Remote Stream, Host, Audience">
     <meta name="author" content="Akshat Gupta">
     <meta name="copyright" content="Akshat Gupta">
     <meta name="language" content="en">
-    <meta name="url" content="https://changerole.akshatvg.com">
+    <meta name="url" content="https://handraise.akshatvg.com/">
     <meta name="category" content="Real Time Communication">
     <meta name="coverage" content="Worldwide">
     <meta name="rating" content="General">
@@ -21,26 +22,26 @@
     <meta name="og:country-name" content="India, USA, China">
     <meta name="og:region"
         content="Delhi, Chennai, Mumbai, Vellore, Kolkatta, Bangalore, Gurgaon, Los Angeles, Chicago">
-    <meta name="og:site_name" content="Change remote user role | Agora">
+    <meta name="og:site_name" content="Invite user to stage | Agora">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Change remote user role | Agora">
+    <meta property="og:title" content="Invite user to stage | Agora">
     <meta property="og:description"
-        content="Sample app to change role of a remote user in a live stream using the RTM SDK.">
-    <meta property="og:url" content="https://changerole.akshatvg.com">
+        content="Invite a user to stage and become a host using a raise hand feature during a livestream using the Agora RTC and RTM SDKs.">
+    <meta property="og:url" content="https://handraise.akshatvg.com/">
     <meta name="theme-color" content="#2F3FB0">
-    <meta property="og:site_name" content="Change remote user role | Agora">
+    <meta property="og:site_name" content="Invite user to stage | Agora">
     <meta name="twitter:card" content="website">
-    <meta name="twitter:site" content="Change remote user role | Agora">
-    <meta name="twitter:title" content="Change remote user role | Agora">
+    <meta name="twitter:site" content="Invite user to stage | Agora">
+    <meta name="twitter:title" content="Invite user to stage | Agora">
     <meta property="og:image" itemprop="image" content="favicon.png">
     <meta name="twitter:description"
-        content="Sample app to change role of a remote user in a live stream using the RTM SDK.">
+        content="Invite a user to stage and become a host using a raise hand feature during a livestream using the Agora RTC and RTM SDKs.">
     <meta name="twitter:creator" content="@akshatvg">
-    <meta itemprop="name" content="Change remote user role | Agora">
+    <meta itemprop="name" content="Invite user to stage | Agora">
     <meta itemprop="description"
-        content="Sample app to change role of a remote user in a live stream using the RTM SDK.">
-    <link rel="canonical" href="https://changerole.akshatvg.com">
-    <title>Change remote user role | Agora</title>
+        content="Invite a user to stage and become a host using a raise hand feature during a livestream using the Agora RTC and RTM SDKs.">
+    <link rel="canonical" href="https://handraise.akshatvg.com/">
+    <title>Invite user to stage | Agora</title>
     <link rel="icon" href="favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png" type="image/png">
 
@@ -57,7 +58,7 @@
 
     <!-- Title -->
     <div class="container-fluid banner">
-        <p class="banner-text">Live Streaming</p>
+        <p class="banner-text">Invite to Stage</p>
     </div>
     <div class="container">
         <form id="join-form" name="join-form" class="mt-4">
@@ -80,6 +81,7 @@
             <div class="button-group mt-3">
                 <button id="host-join" type="submit" class="btn btn-live btn-sm">Join as Host</button>
                 <button id="audience-join" type="submit" class="btn btn-live btn-sm">Join as Audience</button>
+                <button id="raise-hand" type="button" class="btn btn-live btn-sm" disabled>Raise Hand</button>
                 <button id="leave" type="button" class="btn btn-live btn-sm" disabled>Leave</button>
             </div>
         </form>
