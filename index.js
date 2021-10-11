@@ -125,7 +125,7 @@ async function RTMJoin() {
         channel = clientRTM.createChannel(channelName);
         channel.join().then(() => {
             console.log('AgoraRTM client channel join success.');
-            // Get all members in RTM Channel
+            // TODO: Get all members in RTM Channel for new users
             channel.getMembers().then((memberNames) => {
                 console.log("------------------------------");
                 console.log("All members in the channel are as follows: ");
@@ -145,7 +145,7 @@ async function RTMJoin() {
                 });
                 $("#insert-all-users").html(newHTML.join(""));
             });
-            // Send peer-to-peer message for changing role to host
+            // TODO: Send peer-to-peer message for raising hand 
             $(document).on('click', '.remoteHost', function () {
                 fullDivId = $(this).attr('id');
                 peerId = fullDivId.substring(fullDivId.indexOf("-") + 1);
@@ -163,25 +163,7 @@ async function RTMJoin() {
                     }
                 })
             });
-            // Send peer-to-peer message for changing role to audience
-            $(document).on('click', '.remoteAudience', function () {
-                fullDivId = $(this).attr('id');
-                peerId = fullDivId.substring(fullDivId.indexOf("-") + 1);
-                console.log("Remote audience button pressed.");
-                let peerMessage = "audience";
-                clientRTM.sendMessageToPeer({
-                        text: peerMessage
-                    },
-                    peerId,
-                ).then(sendResult => {
-                    if (sendResult.hasPeerReceived) {
-                        console.log("Message has been received by: " + peerId + " Message: " + peerMessage);
-                    } else {
-                        console.log("Message sent to: " + peerId + " Message: " + peerMessage);
-                    }
-                })
-            });
-            // Display messages from peer
+           // TODO: Display peer message when someone raises hand
             clientRTM.on('MessageFromPeer', function ({
                 text
             }, peerId) {
@@ -206,7 +188,7 @@ async function RTMJoin() {
             })
             // Display channel member joined updated users
             channel.on('MemberJoined', function () {
-                // Get all members in RTM Channel
+                // TODO: Get all members in RTM Channel when new user joins
                 channel.getMembers().then((memberNames) => {
                     console.log("New member joined so updated list is: ");
                     console.log(memberNames);
@@ -228,7 +210,7 @@ async function RTMJoin() {
             })
             // Display channel member left updated users
             channel.on('MemberLeft', function () {
-                // Get all members in RTM Channel
+                // TODO: Get all members in RTM Channel when user leaves
                 channel.getMembers().then((memberNames) => {
                     console.log("A member left so updated list is: ");
                     console.log(memberNames);
