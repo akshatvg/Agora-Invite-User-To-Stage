@@ -123,16 +123,16 @@ async function RTMJoin() { // Create Agora RTM client
         channel.join().then(() => {
             console.log('AgoraRTM client channel join success.');
             // Send channel message for raising hand
-            $(document).on('click', '#raise-hand', function () {
+            $(document).on('click', '#raise-hand', async function () {
                 fullDivId = $(this).attr('id');
                 if (handRaiseState === false) {
                     $("#raise-hand").text("Lower Hand");
                     handRaiseState = true;
                     console.log("Hand raised.");
                     // Inform channel that rand was raised
-                    channel.sendMessage({ text: handRaiseState.toString() }).then(() => {
+                    await channel.sendMessage({ text: "raised" }).then(() => {
                         console.log("Message sent successfully.");
-                        console.log("Your message was: " + handRaiseState + " sent by: " + accountName);
+                        console.log("Your message was: raised" + " sent by: " + accountName);
                     }).catch((err) => {
                         console.error("Message sending failed: " + err);
                     })
@@ -142,9 +142,9 @@ async function RTMJoin() { // Create Agora RTM client
                     handRaiseState = false;
                     console.log("Hand lowered.");
                     // Inform channel that rand was raised
-                    channel.sendMessage({ text: handRaiseState.toString() }).then(() => {
+                    await channel.sendMessage({ text: "lowered" }).then(() => {
                         console.log("Message sent successfully.");
-                        console.log("Your message was: " + handRaiseState + " sent by: " + accountName);
+                        console.log("Your message was: lowered" + " sent by: " + accountName);
                     }).catch((err) => {
                         console.error("Message sending failed: " + err);
                     })
@@ -154,10 +154,9 @@ async function RTMJoin() { // Create Agora RTM client
             channel.on('ChannelMessage', async function (text, peerId) {
                 console.log(peerId + " changed their hand raise state to " + text.text);
                 if (options.role === "host") {
-                    if (text.text == "true") {
+                    if (text.text == "raised") {
                         // Ask host if user who raised their hand should be called onto stage or not
-                        var r = confirm(peerId + " raised their hand. Do you want to make them a host?");
-                        if (r === true) {
+                        if (confirm(peerId + " raised their hand. Do you want to make them a host?")) {
                             // Call user onto stage
                             console.log("The host accepted " + peerId + "'s request.");
                             await clientRTM.sendMessageToPeer({
@@ -170,8 +169,10 @@ async function RTMJoin() { // Create Agora RTM client
                                 } else {
                                     console.log("Message sent to: " + peerId + " Message: host");
                                 }
+                            }).catch(error => {
+                                console.log("Error sending peer message: " + error);
                             });
-                        } else if (r === false) {
+                        } else {
                             // Inform the user that they were not made a host
                             console.log("The host rejected " + peerId + "'s request.");
                             await clientRTM.sendMessageToPeer({
@@ -184,9 +185,11 @@ async function RTMJoin() { // Create Agora RTM client
                                 } else {
                                     console.log("Message sent to: " + peerId + " Message: audience");
                                 }
+                            }).catch((error) => {
+                                console.log("Error sending peer message: " + error);
                             });
                         }
-                    } else if (text.text == "false") {
+                    } else if (text.text == "lowered") {
                         console.log("Hand lowered so host can ignore this.");
                     }
                 }
