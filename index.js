@@ -1,8 +1,5 @@
 // create Agora client
-var client = AgoraRTC.createClient({
-    mode: "live",
-    codec: "vp8"
-});
+var client = AgoraRTC.createClient({ mode: "live", codec: "vp8" });
 
 // RTM Global Vars
 var isLoggedIn = false;
@@ -11,6 +8,11 @@ var localTracks = {
     videoTrack: null,
     audioTrack: null
 };
+
+// Hand raise state
+var handRaiseState = false;
+
+
 var remoteUsers = {};
 // Agora client options
 var options = {
@@ -58,11 +60,10 @@ $("#leave").click(function (e) {
     leave();
 })
 
-async function join() {
-    // create Agora client
+async function join() { // create Agora client
     client.setClientRole(options.role);
-    if (options.role === "audience") {
-        // add event listener to play remote tracks when remote user publishs.
+    if (options.role === "audience") { // add event listener to play remote tracks when remote user publishs.
+        $("#raise-hand-div").append(`<button id="raise-hand" type="button" class="btn btn-live btn-sm" disabled>Raise Hand</button>`);
         client.on("user-published", handleUserPublished);
         client.on("user-joined", handleUserJoined);
         client.on("user-left", handleUserLeft);
@@ -78,7 +79,8 @@ async function join() {
         localTracks.videoTrack = await AgoraRTC.createCameraVideoTrack();
         // play local video track
         localTracks.videoTrack.play("local-player");
-        $("#local-player-name").text(`localTrack(${options.uid})`);
+        $("#local-player-name").text(`localTrack(${options.uid
+            })`);
         // publish local tracks to channel
         await client.publish(Object.values(localTracks));
         console.log("Successfully published.");
@@ -108,16 +110,11 @@ async function leave() {
     console.log("Client successfully left channel.");
 }
 
-async function RTMJoin() {
-    // Create Agora RTM client
-    const clientRTM = AgoraRTM.createInstance($("#appid").val(), {
-        enableLogUpload: false
-    });
+async function RTMJoin() { // Create Agora RTM client
+    const clientRTM = AgoraRTM.createInstance($("#appid").val(), { enableLogUpload: false });
     var accountName = $('#accountName').val();
     // Login
-    clientRTM.login({
-        uid: accountName
-    }).then(() => {
+    clientRTM.login({ uid: accountName }).then(() => {
         console.log('AgoraRTM client login success. Username: ' + accountName);
         isLoggedIn = true;
         // RTM Channel Join
@@ -125,111 +122,92 @@ async function RTMJoin() {
         channel = clientRTM.createChannel(channelName);
         channel.join().then(() => {
             console.log('AgoraRTM client channel join success.');
-            // TODO: Get all members in RTM Channel for new users
-            channel.getMembers().then((memberNames) => {
-                console.log("------------------------------");
-                console.log("All members in the channel are as follows: ");
-                console.log(memberNames);
-                var newHTML = $.map(memberNames, function (singleMember) {
-                    if (singleMember != accountName) {
-                        return (`<li class="mt-2">
-                  <div class="row">
-                      <p>${singleMember}</p>
-                   </div>
-                   <div class="mb-4">
-                     <button class="text-white btn btn-live mx-3 remoteHost hostOn" id="remoteAudio-${singleMember}">Make Host</button>
-                     <button class="text-white btn btn-live remoteAudience audienceOn" id="remoteVideo-${singleMember}">Make Audience</button>
-                    </div>
-                 </li>`);
-                    }
-                });
-                $("#insert-all-users").html(newHTML.join(""));
-            });
-            // TODO: Send peer-to-peer message for raising hand 
-            $(document).on('click', '.remoteHost', function () {
+            // Send channel message for raising hand
+            $(document).on('click', '#raise-hand', function () {
                 fullDivId = $(this).attr('id');
-                peerId = fullDivId.substring(fullDivId.indexOf("-") + 1);
-                console.log("Remote host button pressed.");
-                let peerMessage = "host";
-                clientRTM.sendMessageToPeer({
-                        text: peerMessage
-                    },
-                    peerId,
-                ).then(sendResult => {
-                    if (sendResult.hasPeerReceived) {
-                        console.log("Message has been received by: " + peerId + " Message: " + peerMessage);
-                    } else {
-                        console.log("Message sent to: " + peerId + " Message: " + peerMessage);
-                    }
-                })
+                if (handRaiseState === false) {
+                    $("#raise-hand").text("Lower Hand");
+                    handRaiseState = true;
+                    console.log("Hand raised.");
+                    // Inform channel that rand was raised
+                    channel.sendMessage({ text: handRaiseState.toString() }).then(() => {
+                        console.log("Message sent successfully.");
+                        console.log("Your message was: " + handRaiseState + " sent by: " + accountName);
+                    }).catch((err) => {
+                        console.error("Message sending failed: " + err);
+                    })
+                }
+                else if (handRaiseState === true) {
+                    $("#raise-hand").text("Raise Hand");
+                    handRaiseState = false;
+                    console.log("Hand lowered.");
+                    // Inform channel that rand was raised
+                    channel.sendMessage({ text: handRaiseState.toString() }).then(() => {
+                        console.log("Message sent successfully.");
+                        console.log("Your message was: " + handRaiseState + " sent by: " + accountName);
+                    }).catch((err) => {
+                        console.error("Message sending failed: " + err);
+                    })
+                }
             });
-           // TODO: Display peer message when someone raises hand
-            clientRTM.on('MessageFromPeer', function ({
+            // Get channel message when someone raises hand
+            channel.on('ChannelMessage', function (text, peerId) {
+                console.log(peerId + " changed their hand raise state to " + text.text);
+                if (text.text == "true") {
+                    // Ask host if user who raised their hand should be called onto stage or not
+                    var r = confirm(peerId + " raised their hand. Do you want to make them a host?");
+                    if (r == true) {
+                        // Call user onto stage
+                        console.log("The host accepted " + peerId + "'s request.");
+                        clientRTM.sendMessageToPeer({
+                            text: "host"
+                        },
+                            peerId,
+                        ).then(sendResult => {
+                            if (sendResult.hasPeerReceived) {
+                                console.log("Message has been received by: " + peerId + " Message: " + peerMessage);
+                            } else {
+                                console.log("Message sent to: " + peerId + " Message: " + peerMessage);
+                            }
+                        });
+                    } else {
+                        // Inform the user that they were not made a host
+                        console.log("The host rejected " + peerId + "'s request.");
+                        clientRTM.sendMessageToPeer({
+                            text: "audience"
+                        },
+                            peerId,
+                        ).then(sendResult => {
+                            if (sendResult.hasPeerReceived) {
+                                console.log("Message has been received by: " + peerId + " Message: " + peerMessage);
+                            } else {
+                                console.log("Message sent to: " + peerId + " Message: " + peerMessage);
+                            }
+                        });
+                    }
+                } else if (text.text == "false") {
+                    console.log("Hand lowered so host can ignore this.");
+                }
+            })
+            // Display messages from host when they approve the request
+            clientRTM.on('MessageFromPeer', async function ({
                 text
             }, peerId) {
                 console.log(peerId + " changed your role to " + text);
                 if (text == "host") {
-                    leave();
+                    await leave();
                     options.role = "host";
                     console.log("Role changed to host.");
-                    client.setClientRole("host");
-                    join();
+                    await client.setClientRole("host");
+                    await join();
                     $("#host-join").attr("disabled", true);
                     $("#audience-join").attr("disabled", true);
+                    $("#leave").attr("disabled", false);
+                    $("#raise-hand").remove();
                 } else if (text == "audience") {
-                    leave();
-                    options.role = "audience";
-                    console.log("Role changed to audience.");
-                    client.setClientRole("audience");
-                    join();
-                    $("#host-join").attr("disabled", true);
-                    $("#audience-join").attr("disabled", true);
+                    alert("The host rejected your proposal to be called onto stage.");
                 }
             })
-            // Display channel member joined updated users
-            channel.on('MemberJoined', function () {
-                // TODO: Get all members in RTM Channel when new user joins
-                channel.getMembers().then((memberNames) => {
-                    console.log("New member joined so updated list is: ");
-                    console.log(memberNames);
-                    var newHTML = $.map(memberNames, function (singleMember) {
-                        if (singleMember != accountName) {
-                            return (`<li class="mt-2">
-                      <div class="row">
-                          <p>${singleMember}</p>
-                       </div>
-                       <div class="mb-4">
-                         <button class="text-white btn btn-live mx-3 remoteHost hostOn" id="remoteAudio-${singleMember}">Make Host</button>
-                         <button class="text-white btn btn-live remoteAudience audienceOn" id="remoteVideo-${singleMember}">Make Audience</button>
-                        </div>
-                     </li>`);
-                        }
-                    });
-                    $("#insert-all-users").html(newHTML.join(""));
-                });
-            })
-            // Display channel member left updated users
-            channel.on('MemberLeft', function () {
-                // TODO: Get all members in RTM Channel when user leaves
-                channel.getMembers().then((memberNames) => {
-                    console.log("A member left so updated list is: ");
-                    console.log(memberNames);
-                    var newHTML = $.map(memberNames, function (singleMember) {
-                        if (singleMember != accountName) {
-                            return (`<li class="mt-2">
-                      <div class="row">
-                          <p>${singleMember}</p>
-                       </div>
-                       <div class="mb-4">
-                         <button class="text-white btn btn-live mx-3 remoteHost hostOn" id="remoteAudio-${singleMember}">Make Host</button>
-                         <button class="text-white btn btn-live remoteAudience audienceOn" id="remoteVideo-${singleMember}">Make Audience</button>
-                        </div>
-                     </li>`);
-                        }
-                    });
-                    $("#insert-all-users").html(newHTML.join(""));
-                });
-            });
         }).catch(error => {
             console.log('AgoraRTM client channel join failed: ', error);
         }).catch(err => {
