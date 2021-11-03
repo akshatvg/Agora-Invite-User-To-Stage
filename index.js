@@ -165,9 +165,9 @@ async function RTMJoin() { // Create Agora RTM client
                             peerId,
                         ).then(sendResult => {
                             if (sendResult.hasPeerReceived) {
-                                console.log("Message has been received by: " + peerId + " Message: " + peerMessage);
+                                console.log("Message has been received by: " + peerId + " Message: host");
                             } else {
-                                console.log("Message sent to: " + peerId + " Message: " + peerMessage);
+                                console.log("Message sent to: " + peerId + " Message: host");
                             }
                         });
                     } else {
@@ -179,9 +179,9 @@ async function RTMJoin() { // Create Agora RTM client
                             peerId,
                         ).then(sendResult => {
                             if (sendResult.hasPeerReceived) {
-                                console.log("Message has been received by: " + peerId + " Message: " + peerMessage);
+                                console.log("Message has been received by: " + peerId + " Message: audience");
                             } else {
-                                console.log("Message sent to: " + peerId + " Message: " + peerMessage);
+                                console.log("Message sent to: " + peerId + " Message: audience");
                             }
                         });
                     }
