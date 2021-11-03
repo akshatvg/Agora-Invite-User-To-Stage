@@ -199,7 +199,7 @@ async function RTMJoin() { // Create Agora RTM client
                 text
             }, peerId) {
                 console.log(peerId + " changed your role to " + text);
-                if (text == "host") {
+                if (text === "host") {
                     await leave();
                     options.role = "host";
                     console.log("Role changed to host.");
@@ -209,7 +209,7 @@ async function RTMJoin() { // Create Agora RTM client
                     $("#audience-join").attr("disabled", true);
                     $("#raise-hand").attr("disabled", false);
                     $("#leave").attr("disabled", false);
-                } else if (text == "audience") {
+                } else if (text === "audience" && options.role !== "audience") {
                     alert("The host rejected your proposal to be called onto stage.");
                     $("#raise-hand").attr("disabled", false);
                 }
