@@ -151,42 +151,44 @@ async function RTMJoin() { // Create Agora RTM client
                 }
             });
             // Get channel message when someone raises hand
-            channel.on('ChannelMessage', function (text, peerId) {
+            channel.on('ChannelMessage', async function (text, peerId) {
                 console.log(peerId + " changed their hand raise state to " + text.text);
-                if (text.text == "true") {
-                    // Ask host if user who raised their hand should be called onto stage or not
-                    var r = confirm(peerId + " raised their hand. Do you want to make them a host?");
-                    if (r == true) {
-                        // Call user onto stage
-                        console.log("The host accepted " + peerId + "'s request.");
-                        clientRTM.sendMessageToPeer({
-                            text: "host"
-                        },
-                            peerId,
-                        ).then(sendResult => {
-                            if (sendResult.hasPeerReceived) {
-                                console.log("Message has been received by: " + peerId + " Message: host");
-                            } else {
-                                console.log("Message sent to: " + peerId + " Message: host");
-                            }
-                        });
-                    } else {
-                        // Inform the user that they were not made a host
-                        console.log("The host rejected " + peerId + "'s request.");
-                        clientRTM.sendMessageToPeer({
-                            text: "audience"
-                        },
-                            peerId,
-                        ).then(sendResult => {
-                            if (sendResult.hasPeerReceived) {
-                                console.log("Message has been received by: " + peerId + " Message: audience");
-                            } else {
-                                console.log("Message sent to: " + peerId + " Message: audience");
-                            }
-                        });
+                if (options.role === "host") {
+                    if (text.text == "true") {
+                        // Ask host if user who raised their hand should be called onto stage or not
+                        var r = confirm(peerId + " raised their hand. Do you want to make them a host?");
+                        if (r === true) {
+                            // Call user onto stage
+                            console.log("The host accepted " + peerId + "'s request.");
+                            await clientRTM.sendMessageToPeer({
+                                text: "host"
+                            },
+                                peerId,
+                            ).then(sendResult => {
+                                if (sendResult.hasPeerReceived) {
+                                    console.log("Message has been received by: " + peerId + " Message: host");
+                                } else {
+                                    console.log("Message sent to: " + peerId + " Message: host");
+                                }
+                            });
+                        } else if (r === false) {
+                            // Inform the user that they were not made a host
+                            console.log("The host rejected " + peerId + "'s request.");
+                            await clientRTM.sendMessageToPeer({
+                                text: "audience"
+                            },
+                                peerId,
+                            ).then(sendResult => {
+                                if (sendResult.hasPeerReceived) {
+                                    console.log("Message has been received by: " + peerId + " Message: audience");
+                                } else {
+                                    console.log("Message sent to: " + peerId + " Message: audience");
+                                }
+                            });
+                        }
+                    } else if (text.text == "false") {
+                        console.log("Hand lowered so host can ignore this.");
                     }
-                } else if (text.text == "false") {
-                    console.log("Hand lowered so host can ignore this.");
                 }
             })
             // Display messages from host when they approve the request
@@ -202,10 +204,11 @@ async function RTMJoin() { // Create Agora RTM client
                     await join();
                     $("#host-join").attr("disabled", true);
                     $("#audience-join").attr("disabled", true);
+                    $("#raise-hand").attr("disabled", false);
                     $("#leave").attr("disabled", false);
-                    $("#raise-hand").remove();
                 } else if (text == "audience") {
                     alert("The host rejected your proposal to be called onto stage.");
+                    $("#raise-hand").attr("disabled", false);
                 }
             })
         }).catch(error => {
