@@ -9,7 +9,6 @@
     margin: 0;
 }
 
-
 #join-form {
     margin-top: 10px;
 }
@@ -54,22 +53,15 @@ input {
     overflow: scroll;
 }
 
-#host-join,
-#audience-join,
-#leave,
-#raise-hand {
+#host-join, #audience-join, #leave, #raise-hand, #mic-btn, #video-btn {
     background-color: #0C9DFD;
     color: white;
     border-radius: 5px;
 }
 
-#host-join:hover,
-#leave:hover,
-#audience-join:hover,
-#raise-hand:hover {
+#host-join:hover, #leave:hover, #audience-join:hover, #raise-hand:hover, #mic-btn:hover, #video-btn:hover {
     background-color: rgba(2, 133, 221, 0.911);
 }
-
 
 .btn-live {
     outline: none;
@@ -77,8 +69,7 @@ input {
     box-shadow: none;
 }
 
-.btn-live:hover,
-.btn-live:focus {
+.btn-live:hover, .btn-live:focus {
     outline: none;
     box-shadow: none;
     border: 1px solid white;

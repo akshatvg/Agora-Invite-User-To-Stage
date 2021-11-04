@@ -9,6 +9,11 @@ var localTracks = {
     audioTrack: null
 };
 
+var localTrackState = {
+    videoTrackEnabled: true,
+    audioTrackEnabled: true
+  }
+
 // Hand raise state
 var handRaiseState = false;
 
@@ -62,8 +67,13 @@ $("#leave").click(function (e) {
 
 async function join() { // create Agora client
     client.setClientRole(options.role);
-    if (options.role === "audience") { // add event listener to play remote tracks when remote user publishs.
+    $("#mic-btn").prop("disabled", false);
+    $("#video-btn").prop("disabled", false);
+    if (options.role === "audience") {
+        $("#mic-btn").prop("disabled", true);
+        $("#video-btn").prop("disabled", true);
         $("#raise-hand-div").append(`<button id="raise-hand" type="button" class="btn btn-live btn-sm" disabled>Raise Hand</button>`);
+        // Event listeners
         client.on("user-published", handleUserPublished);
         client.on("user-joined", handleUserJoined);
         client.on("user-left", handleUserLeft);
@@ -71,6 +81,8 @@ async function join() { // create Agora client
     // join the channel
     options.uid = await client.join(options.appid, options.channel, options.token || null);
     if (options.role === "host") {
+        $('#mic-btn').prop('disabled', false);
+        $('#video-btn').prop('disabled', false);
         client.on("user-published", handleUserPublished);
         client.on("user-joined", handleUserJoined);
         client.on("user-left", handleUserLeft);
@@ -94,6 +106,8 @@ async function leave() {
         if (track) {
             track.stop();
             track.close();
+            $('#mic-btn').prop('disabled', true);
+            $('#video-btn').prop('disabled', true);
             localTracks[trackName] = undefined;
         }
     }
@@ -266,4 +280,66 @@ function handleUserLeft(user) {
     const id = user.uid;
     delete remoteUsers[id];
     $(`#player-wrapper-${id}`).remove();
+}
+
+// Mute audio click
+$("#mic-btn").click(function (e) {
+    if (localTrackState.audioTrackEnabled) {
+        muteAudio();
+    } else {
+        unmuteAudio();
+    }
+});
+
+// Mute video click
+$("#video-btn").click(function (e) {
+    if (localTrackState.videoTrackEnabled) {
+        muteVideo();
+    } else {
+        unmuteVideo();
+    }
+})
+
+// Hide mute buttons
+function hideMuteButton() {
+    $("#video-btn").css("display", "none");
+    $("#mic-btn").css("display", "none");
+}
+
+// Show mute buttons
+function showMuteButton() {
+    $("#video-btn").css("display", "inline-block");
+    $("#mic-btn").css("display", "inline-block");
+}
+
+// Mute audio function
+async function muteAudio() {
+    if (!localTracks.audioTrack) return;
+    await localTracks.audioTrack.setEnabled(false);
+    localTrackState.audioTrackEnabled = false;
+    $("#mic-btn").text("Unmute Audio");
+}
+
+// Mute video function
+async function muteVideo() {
+    if (!localTracks.videoTrack) return;
+    await localTracks.videoTrack.setEnabled(false);
+    localTrackState.videoTrackEnabled = false;
+    $("#video-btn").text("Unmute Video");
+}
+
+// Unmute audio function
+async function unmuteAudio() {
+    if (!localTracks.audioTrack) return;
+    await localTracks.audioTrack.setEnabled(true);
+    localTrackState.audioTrackEnabled = true;
+    $("#mic-btn").text("Mute Audio");
+}
+
+// Unmute video function
+async function unmuteVideo() {
+    if (!localTracks.videoTrack) return;
+    await localTracks.videoTrack.setEnabled(true);
+    localTrackState.videoTrackEnabled = true;
+    $("#video-btn").text("Mute Video");
 }
