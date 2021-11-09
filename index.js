@@ -12,7 +12,7 @@ var localTracks = {
 var localTrackState = {
     videoTrackEnabled: true,
     audioTrackEnabled: true
-  }
+}
 
 // Hand raise state
 var handRaiseState = false;
@@ -101,6 +101,9 @@ async function join() { // create Agora client
 
 // Leave
 async function leave() {
+    if (options.role === "audience") {
+        $("#raise-hand-div").empty();
+    }
     for (trackName in localTracks) {
         var track = localTracks[trackName];
         if (track) {
@@ -170,7 +173,9 @@ async function RTMJoin() { // Create Agora RTM client
                 if (options.role === "host") {
                     if (text.text == "raised") {
                         // Ask host if user who raised their hand should be called onto stage or not
-                        if (confirm(peerId + " raised their hand. Do you want to make them a host?")) {
+                        $('#confirm').modal('show');
+                        $('#modal-body').text(peerId + " raised their hand. Do you want to make them a host?");
+                        $('#promoteAccept').click(async function () {
                             // Call user onto stage
                             console.log("The host accepted " + peerId + "'s request.");
                             await clientRTM.sendMessageToPeer({
@@ -186,7 +191,9 @@ async function RTMJoin() { // Create Agora RTM client
                             }).catch(error => {
                                 console.log("Error sending peer message: " + error);
                             });
-                        } else {
+                            $('#confirm').modal('hide');
+                        });
+                        $("#cancel").click(async function () {
                             // Inform the user that they were not made a host
                             console.log("The host rejected " + peerId + "'s request.");
                             await clientRTM.sendMessageToPeer({
@@ -202,8 +209,10 @@ async function RTMJoin() { // Create Agora RTM client
                             }).catch((error) => {
                                 console.log("Error sending peer message: " + error);
                             });
-                        }
+                            $('#confirm').modal('hide');
+                        });
                     } else if (text.text == "lowered") {
+                        $('#confirm').modal('hide');
                         console.log("Hand lowered so host can ignore this.");
                     }
                 }

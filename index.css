@@ -53,13 +53,13 @@ input {
     overflow: scroll;
 }
 
-#host-join, #audience-join, #leave, #raise-hand, #mic-btn, #video-btn {
+#host-join, #audience-join, #leave, #raise-hand, #mic-btn, #video-btn, #promoteAccept {
     background-color: #0C9DFD;
     color: white;
     border-radius: 5px;
 }
 
-#host-join:hover, #leave:hover, #audience-join:hover, #raise-hand:hover, #mic-btn:hover, #video-btn:hover {
+#host-join:hover, #leave:hover, #audience-join:hover, #raise-hand:hover, #mic-btn:hover, #video-btn:hover, #promoteAccept:hover {
     background-color: rgba(2, 133, 221, 0.911);
 }
 
